@@ -1,4 +1,5 @@
-import requests, json
+import requests
+import json
 from bs4 import BeautifulSoup
 from advanced_expiry_caching import Cache
 import csv
@@ -10,6 +11,7 @@ FILENAME = "finalproject_cache.json"
 
 PROGRAM_CACHE = Cache(FILENAME)
 
+
 def access_page_data(url):
     data = PROGRAM_CACHE.get(url)
     if not data:
@@ -19,75 +21,63 @@ def access_page_data(url):
 
 #######
 
+
 main_page = access_page_data(START_URL)
 
 main_soup = BeautifulSoup(main_page, features="html.parser")
-list_of_topics = main_soup.find_all('div',{'class':'flip-container'})
-print(list_of_topics) # cool
-#
-# all_links = list_of_topics.find_all('a')
-# print(all_links) # cool
-#
-#
+hrefs = [a["href"] for a in main_soup.select('div.flip-container a[href]')]
+# print(hrefs)
+
+# clean duplicate data
+seen = set()
+all_links = []
+for item in hrefs:
+    if item not in seen:
+        seen.add(item)
+        all_links.append(item)
+# print(all_links)
+
 # for link in all_links:
-#     print(link['href'])
+# print(link)
+
+page_data = access_page_data('https://toolkits.dss.cloud/design/method-card/1-on-1-interview/')
+soup_of_page = BeautifulSoup(page_data, features="html.parser")
+
+# all info in one page
+def one_page():
+    name = soup_of_page.find('div',{'class':'title'}).find('h1')
+    print(name.text)
+
+
+    tasks= soup_of_page.find('div',{'class':'card_text'}).find('p')
+    print(tasks.text)
+
+
+    #grasp data
+    feature= soup_of_page.find('section',{'class':'card_ww'}).find_all('div')
+    #when
+    when=feature[0].find('p')
+    print(when.text)
+    #why
+    why=feature[1].find('p')
+    print(why.text)
+    #note
+    note=feature[2].find('p')
+    print(note.text)
+    #output
+    output=feature[3].find('p')
+    print(output.text)
+    #next
+    next=feature[4].find('p')
+    print(next.text)
+
 #
+# one_page_rows=zip(Name,Type,Description,Location,State)
 #
-#
-# # test on one page
-# page_data = access_page_data('https://www.nps.gov/state/mi/index.htm')
-# soup_of_page = BeautifulSoup(page_data, features="html.parser")
-#
-#
-# #all info in one page
-# def one_page():
-#     Location=[]
-#     location=soup_of_page.find_all('h4')
-#     for i in location[1:]:
-#         # print(i.text)
-#         Location.append(i.text)
-#         # print(Location)
-#
-#     Description=[]
-#     description=soup_of_page.find_all('p')
-#     for i in description[:-2]:
-#         # print(i.text)
-#         Description.append(i.text[1:-1])
-#         # print(Description)
-#
-#     Name=[]
-#     name=soup_of_page.find_all('h3')
-#     for i in name[1:]:
-#         item=i.find('a')
-#         if item != None:
-#             Name.append(item.text)
-#     # print(Name)
-#
-#
-#
-#     Type=[]
-#     type=soup_of_page.find_all('h2')
-#     for i in type[1:-2]:
-#         Type.append(i.text)
-#         # print(i.text)
-#     # print(Type)
-#
-#
-#     numbers=len(name)-1
-#
-#     State=[]
-#     state=soup_of_page.find('h1').text
-#     for i in range(0,numbers):
-#         # print(i.text)
-#         State.append(state)
-#     # print(State)
-#
-#     one_page_rows=zip(Name,Type,Description,Location,State)
-#
-#     with open('test.csv', "a") as f:
-#         writer = csv.writer(f)
-#         for row in one_page_rows:
-#             writer.writerow(row)
+# with open('test.csv', "a") as f:
+#     writer = csv.writer(f)
+#     for row in one_page_rows:
+#         writer.writerow(row)
 #
 #
 #
