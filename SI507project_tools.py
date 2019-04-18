@@ -51,57 +51,53 @@ soup_of_page = BeautifulSoup(page_data, features="html.parser")
 # all info in one page
 def one_page():
     name = soup_of_page.find('div',{'class':'title'}).find('h1')
-    print(name.text)
+    # print(name.text)
 
 
     tasks= soup_of_page.find('div',{'class':'card_text'}).find('p')
-    print(tasks.text)
+    # print(tasks.text)
 
     image= soup_of_page.find('div',{'class':'icon'}).find('img')
-    print(image['src'])
+    # print(image['src'])
 
     time= soup_of_page.find('div',{'class':'time'}).find('h2')
-    print(time.text)
+    # print(time.text)
 
 
     stage= soup_of_page.find('div',{'class':'cat-left'})
     stage_string=stage['class'][1]
     stage_name=stage_string[:-4]
-    print(stage_name)
+    # print(stage_name)
 
     purpose= soup_of_page.find('div',{'class':'cat-right'})
     purpose_string=purpose['class'][1]
     purpose_name=purpose_string[:-4]
-    print(purpose_name)
+    # print(purpose_name)
 
 
     #grasp data
     feature= soup_of_page.find('section',{'class':'card_ww'}).find_all('div')
     #when
     when=feature[0].find('p')
-    print(when.text)
+    # print(when.text)
     #why
     why=feature[1].find('p')
-    print(why.text)
+    # print(why.text)
     #note
     note=feature[2].find('p')
-    print(note.text)
+    # print(note.text)
     #output
     output=feature[3].find('p')
-    print(output.text)
+    # print(output.text)
     #next
     next=feature[4].find('p')
-    print(next.text)
+    # print(next.text)
 
-#
-# one_page_rows=zip(Name,Type,Description,Location,State)
-#
-# with open('test.csv', "a") as f:
-#     writer = csv.writer(f)
-#     for row in one_page_rows:
-#         writer.writerow(row)
-#
-#
+
+    one_page_rows=[name.text,tasks.text,image['src'],time.text,stage_name,purpose_name,when.text,why.text,note.text,output.text,next.text]
+    with open('data.csv', "a") as f:
+        writer = csv.writer(f)
+        writer.writerow(one_page_rows)
 
 
 topics_pages = []
@@ -109,8 +105,6 @@ for l in all_links:
     page_data = access_page_data(l)
     soup_of_page = BeautifulSoup(page_data, features="html.parser")
     one_page()
-
-
 
 
 

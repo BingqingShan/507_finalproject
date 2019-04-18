@@ -23,6 +23,9 @@ class PartThree(unittest.TestCase): #the form won’t allow you to save if you g
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['text'],["You can't have an empty list item"])
 
+class PartFour(unittest.TestCase):
+    def Random_Method(self):
+        self.assertTrue(len(list(randome_method)) = 1, "Testing that if the randome method generating function only returns one instance out)")
 
 
 
