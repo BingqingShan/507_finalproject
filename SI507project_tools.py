@@ -6,7 +6,11 @@ import csv
 import os
 from flask import Flask, render_template, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from db_populate import *
+import random
 
+# from sqlalchemy import Column, ForeignKey, Integer, String, REAL
+# from sqlalchemy.orm import relationship
 ######
 
 START_URL = "https://toolkits.dss.cloud/design/"
@@ -46,8 +50,14 @@ for item in hrefs:
 page_data = access_page_data('https://toolkits.dss.cloud/design/method-card/1-on-1-interview/')
 soup_of_page = BeautifulSoup(page_data, features="html.parser")
 
+f = open("data.csv", "w")
+writer = csv.DictWriter(
+    f, fieldnames=["Name", "Task","Image","Time","Stage","Purpose","When","Why","Note","Output","Next"])
+writer.writeheader()
+f.close()
 
-
+stage_list=[]
+purpose_list=[]
 # all info in one page
 def one_page():
     name = soup_of_page.find('div',{'class':'title'}).find('h1')
@@ -68,12 +78,15 @@ def one_page():
     stage_string=stage['class'][1]
     stage_name=stage_string[:-4]
     # print(stage_name)
+    if stage_name not in stage_list:
+        stage_list.append(stage_name)
 
     purpose= soup_of_page.find('div',{'class':'cat-right'})
     purpose_string=purpose['class'][1]
     purpose_name=purpose_string[:-4]
     # print(purpose_name)
-
+    if purpose_name not in purpose_list:
+        purpose_list.append(purpose_name)
 
     #grasp data
     feature= soup_of_page.find('section',{'class':'card_ww'}).find_all('div')
@@ -93,11 +106,11 @@ def one_page():
     next=feature[4].find('p')
     # print(next.text)
 
-
     one_page_rows=[name.text,tasks.text,image['src'],time.text,stage_name,purpose_name,when.text,why.text,note.text,output.text,next.text]
     with open('data.csv', "a") as f:
         writer = csv.writer(f)
         writer.writerow(one_page_rows)
+
 
 
 topics_pages = []
@@ -105,7 +118,6 @@ for l in all_links:
     page_data = access_page_data(l)
     soup_of_page = BeautifulSoup(page_data, features="html.parser")
     one_page()
-
 
 
 
@@ -136,38 +148,41 @@ collections = db.Table('collections',db.Column('stage_id',db.Integer, db.Foreign
 class Stage(db.Model):
     __tablename__ = "Stages"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    purposes = db.relationship('Purpose',secondary=collections,backref=db.backref('Stages',lazy='dynamic'),lazy='dynamic')
-    methods = db.relationship('Method',backref='Stage')
+    name = db.Column(db.String(250))
+    purposes = db.relationship('Purpose',secondary=collections,backref=db.backref('stages',lazy='dynamic'),lazy='dynamic')
+    approaches = db.relationship('Approach',backref='stage')
 
 
 class Purpose(db.Model):
     __tablename__ = "Purposes"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    methods = db.relationship('Method',backref='Purpose')
+    name = db.Column(db.String(250))
+    approaches = db.relationship('Approach',backref='purpose')
     #
     # def __repr__(self):
     #     return "{} (ID: {})".format(self.lastname, self.firstname, self.id)
 
 
-class Method(db.Model):
-    __tablename__ = "Methods"
+class Approach(db.Model):
+    __tablename__ = "Approaches"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64),unique=True) # Only unique title songs can exist in this data model
+    name = db.Column(db.String(250),unique=True) # Only unique title songs can exist in this data model
     stage_id = db.Column(db.Integer, db.ForeignKey("Stages.id")) # ok to be null for now
     purpose_id = db.Column(db.Integer, db.ForeignKey("Purposes.id")) #ok to be null for now
-    time = db.Column(db.String(64))
-    task = db.Column(db.String(64))
-    when = db.Column(db.String(64))
-    why = db.Column(db.String(64))
-    note = db.Column(db.String(64))
-    output = db.Column(db.String(64))
-    next = db.Column(db.String(64))
-    image = db.Column(db.String(64))
+    time = db.Column(db.String(250))
+    task = db.Column(db.String(250))
+    when = db.Column(db.String(250))
+    why = db.Column(db.String(250))
+    note = db.Column(db.String(250))
+    output = db.Column(db.String(250))
+    next = db.Column(db.String(250))
+    image = db.Column(db.String(250))
 
     # def __repr__(self):
     #     return "{} by {} | {}".format(self.title,self.director_id, self.distributor_id, self.major_genre)
+
+# print(stage_list)
+# print(purpose_list)
 
 
 ##### Helper functions #####
@@ -194,7 +209,16 @@ class Method(db.Model):
 #
 #
 # ##### Set up Controllers (route functions) #####
-#
+
+@app.route('/')
+def index():
+    approach=random.choice(Approach.query.all())
+    # print(approach["name"])
+    print('test')
+    return render_template('index.html', random_approach=approach)
+
+
+
 # @app.route('/movie/new/<title>/<director>/<distributor>/<major_genre>/<us_gross>/<worldwide_gross>/<us_dvd_sales>/<production_budget>/')
 # def new__movie(title, director, distributor, major_genre,us_gross,worldwide_gross,us_dvd_sales,production_budget):
 #     if Movie.query.filter_by(title=title).first():
@@ -230,6 +254,16 @@ class Method(db.Model):
 #     return render_template('all_directors.html',all_directors=all_directors)
 #
 #
+# if __name__ == '__main__':
+#     db.create_all()
+#     app.run()
+
+# print("hello")
+
+
+
 if __name__ == '__main__':
     db.create_all()
+    # add_data()
+    main_populate("data.csv")
     app.run()

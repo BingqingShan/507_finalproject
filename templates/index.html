@@ -1,0 +1,32 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+      $("p").hide();
+    $("#show").click(function(){
+      $("p").show();
+    });
+  });
+</script>
+</head>
+
+<body>
+<h1> Learn a UX Design & Research Method Today!</h1>
+<img src={{ random_approach.image }} >
+<h2>Method Name: {{ random_approach.name }}</h2>
+<button id="show">Tell me more</button>
+<div>
+  <p>Time: {{ random_approach.time }}</p>
+  <p>Task: {{ random_approach.task }}</p>
+  <p>When: {{ random_approach.when }}</p>
+  <p>Why: {{ random_approach.why }}</p>
+  <p>Note: {{ random_approach.note }}</p>
+  <p>Output: {{ random_approach.output }}</p>
+  <p>Next: {{ random_approach.next }}</p>
+
+  <p class="stage">Stage: {{ random_approach.stage.name }}</p>
+  <p class="purpose">Purpose: {{ random_approach.purpose.name }}</p>
+</div>
+
+</body>
+</html>
