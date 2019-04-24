@@ -20,6 +20,7 @@ def get_or_create_purpose(purpose_name):
         session.commit()
     return purpose
 
+
 def get_or_create_approach(approach_data_dictionary):
     """Accepts list of data about a car -- can assume this is a dictionary of the format of a row of the sample cars.csv file -- and uses that to save a new car and build relationships appropriately."""
     # City mpg,Classification,Driveline,Engine Type,Fuel Type,Height,Highway mpg,Horsepower,Hybrid,ID,Length,Make,Model Year,Number of Forward Gears,Torque,Transmission,Width,Year
@@ -32,9 +33,7 @@ def get_or_create_approach(approach_data_dictionary):
 
     # print(approach_data_dictionary)
     # print(approach_data_dictionary[0])
-    # print("nihao")
-    # print(approach_data_dictionary)
-    # print(approach_data_dictionary["Name"])
+
     approach = Approach.query.filter_by(name=approach_data_dictionary["Name"]).first() # "Find the first car that has this dictionary's same model yr, torque, and value of automatic_transmission -- True if this one should be True and False otherwise" -- transmission data re: looking at data
     if not approach: # If there isn't one like that
         # Then create a new car instance with same var

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from advanced_expiry_caching import Cache
 import csv
 import os
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from db_populate import *
 import random
@@ -213,10 +213,52 @@ class Approach(db.Model):
 @app.route('/')
 def index():
     approach=random.choice(Approach.query.all())
-    # print(approach["name"])
-    print('test')
     return render_template('index.html', random_approach=approach)
 
+
+@app.route('/form')
+def add_data():
+    all_stages=[]
+    all_purposes=[]
+    stage_list=Stage.query.all()
+    purpose_list=Purpose.query.all()
+    for i in stage_list:
+        all_stages.append(i.name)
+    for i in purpose_list:
+        all_purposes.append(i.name)
+    return render_template('form.html', allstages=all_stages, allpurposes=all_purposes)
+
+
+@app.route('/formresult', methods=['POST'])
+def after_search():
+    if request.method == 'POST':
+        approach_dict = request.form.to_dict()
+        get_or_create_approach(approach_dict)
+
+        return render_template('formresult.html')
+
+def populate_data_into_db(media_list):
+    for media in media_list:
+        new_media = Media(media_dict = media)
+        if Media.query.filter_by(name = new_media.name, artist_id = new_media.artist_id).first():
+            continue  # just in case you have same two media in db
+        if Artist.query.filter_by(id=new_media.artist_id).first() == None:
+            artist_dict = look_up_artist_info(new_media.artist_id)
+            new_artist = Artist(artist_dict = artist_dict)
+            new_artist.save_to_db()  # you have to save artist first, before you save a new media
+        new_media.save_to_db()
+    print("* Finish populating the data.")
+
+    return '<h1>Please use the form to visit this link</h1>'  # just in case user use another request method
+
+
+# @app.route('/all_movies')
+# def see_all():
+#     all_movies = []
+#     movies = Movie.query.all()
+#     for i in movies:
+#         all_movies.append((i.title))
+#     return render_template('all_movies.html',all_movies=all_movies)
 
 
 # @app.route('/movie/new/<title>/<director>/<distributor>/<major_genre>/<us_gross>/<worldwide_gross>/<us_dvd_sales>/<production_budget>/')
