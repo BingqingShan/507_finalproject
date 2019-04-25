@@ -9,15 +9,12 @@ from flask_sqlalchemy import SQLAlchemy
 from db_populate import *
 import random
 
-# from sqlalchemy import Column, ForeignKey, Integer, String, REAL
-# from sqlalchemy.orm import relationship
 ######
 
 START_URL = "https://toolkits.dss.cloud/design/"
 FILENAME = "finalproject_cache.json"
 
 PROGRAM_CACHE = Cache(FILENAME)
-
 
 def access_page_data(url):
     data = PROGRAM_CACHE.get(url)
@@ -28,14 +25,12 @@ def access_page_data(url):
 
 #######
 
-
 main_page = access_page_data(START_URL)
 
 main_soup = BeautifulSoup(main_page, features="html.parser")
 hrefs = [a["href"] for a in main_soup.select('div.flip-container a[href]')]
 # print(hrefs)
 
-# clean duplicate data
 seen = set()
 all_links = []
 for item in hrefs:
@@ -73,7 +68,6 @@ def one_page():
     time= soup_of_page.find('div',{'class':'time'}).find('h2')
     # print(time.text)
 
-
     stage= soup_of_page.find('div',{'class':'cat-left'})
     stage_string=stage['class'][1]
     stage_name=stage_string[:-4]
@@ -90,18 +84,23 @@ def one_page():
 
     #grasp data
     feature= soup_of_page.find('section',{'class':'card_ww'}).find_all('div')
+
     #when
     when=feature[0].find('p')
     # print(when.text)
+
     #why
     why=feature[1].find('p')
     # print(why.text)
+
     #note
     note=feature[2].find('p')
     # print(note.text)
+
     #output
     output=feature[3].find('p')
     # print(output.text)
+
     #next
     next=feature[4].find('p')
     # print(next.text)
@@ -111,15 +110,11 @@ def one_page():
         writer = csv.writer(f)
         writer.writerow(one_page_rows)
 
-
-
 topics_pages = []
 for l in all_links:
     page_data = access_page_data(l)
     soup_of_page = BeautifulSoup(page_data, features="html.parser")
     one_page()
-
-
 
 
 ##################Flask and database ###########
@@ -138,8 +133,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app) # For database use
 session = db.session # to make queries easy
 
-
-
 ##### Set up Models #####
 
 # Set up association Table
@@ -152,21 +145,16 @@ class Stage(db.Model):
     purposes = db.relationship('Purpose',secondary=collections,backref=db.backref('stages',lazy='dynamic'),lazy='dynamic')
     approaches = db.relationship('Approach',backref='stage')
 
-
 class Purpose(db.Model):
     __tablename__ = "Purposes"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
     approaches = db.relationship('Approach',backref='purpose')
-    #
-    # def __repr__(self):
-    #     return "{} (ID: {})".format(self.lastname, self.firstname, self.id)
-
 
 class Approach(db.Model):
     __tablename__ = "Approaches"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250),unique=True) # Only unique title songs can exist in this data model
+    name = db.Column(db.String(250),unique=True)
     stage_id = db.Column(db.Integer, db.ForeignKey("Stages.id")) # ok to be null for now
     purpose_id = db.Column(db.Integer, db.ForeignKey("Purposes.id")) #ok to be null for now
     time = db.Column(db.String(250))
@@ -178,43 +166,10 @@ class Approach(db.Model):
     next = db.Column(db.String(250))
     image = db.Column(db.String(250))
 
-    # def __repr__(self):
-    #     return "{} by {} | {}".format(self.title,self.director_id, self.distributor_id, self.major_genre)
-
-# print(stage_list)
-# print(purpose_list)
-
-
-##### Helper functions #####
-#
-# def get_or_create_director(director_name):
-#     director = Director.query.filter_by(name=director_name).first()
-#     if director:
-#         return director
-#     else:
-#         director = Director(name=director_name)
-#         session.add(director)
-#         session.commit()
-#         return director
-#
-# def get_or_create_distributor(distributor_name):
-#     distributor = Distributor.query.filter_by(name=distributor_name).first()
-#     if distributor:
-#         return distributor
-#     else:
-#         distributor = Distributor(name=distributor_name)
-#         session.add(distributor)
-#         session.commit()
-#         return distributor
-#
-#
-# ##### Set up Controllers (route functions) #####
-
 @app.route('/')
 def index():
     approach=random.choice(Approach.query.all())
     return render_template('index.html', random_approach=approach)
-
 
 @app.route('/form')
 def add_data():
@@ -230,82 +185,19 @@ def add_data():
 
 
 @app.route('/formresult', methods=['POST'])
-def after_search():
+def after_add():
     if request.method == 'POST':
         approach_dict = request.form.to_dict()
         get_or_create_approach(approach_dict)
-
         return render_template('formresult.html')
 
-def populate_data_into_db(media_list):
-    for media in media_list:
-        new_media = Media(media_dict = media)
-        if Media.query.filter_by(name = new_media.name, artist_id = new_media.artist_id).first():
-            continue  # just in case you have same two media in db
-        if Artist.query.filter_by(id=new_media.artist_id).first() == None:
-            artist_dict = look_up_artist_info(new_media.artist_id)
-            new_artist = Artist(artist_dict = artist_dict)
-            new_artist.save_to_db()  # you have to save artist first, before you save a new media
-        new_media.save_to_db()
-    print("* Finish populating the data.")
-
-    return '<h1>Please use the form to visit this link</h1>'  # just in case user use another request method
-
-
-# @app.route('/all_movies')
-# def see_all():
-#     all_movies = []
-#     movies = Movie.query.all()
-#     for i in movies:
-#         all_movies.append((i.title))
-#     return render_template('all_movies.html',all_movies=all_movies)
-
-
-# @app.route('/movie/new/<title>/<director>/<distributor>/<major_genre>/<us_gross>/<worldwide_gross>/<us_dvd_sales>/<production_budget>/')
-# def new__movie(title, director, distributor, major_genre,us_gross,worldwide_gross,us_dvd_sales,production_budget):
-#     if Movie.query.filter_by(title=title).first():
-#         return "That movie already exists. Go back to the main app."
-#     else:
-#         director = get_or_create_director(director)
-#         distributor = get_or_create_distributor(distributor)
-#         movie = Movie(title=title, director_id=director.id,distributor_id=distributor.id,major_genre=major_genre,us_gross=us_gross,worldwide_gross=worldwide_gross,us_dvd_sales=us_dvd_sales,production_budget=production_budget)
-#         session.add(movie)
-#         session.commit()
-#         return "New movie: {} directed by {}, distributed by {}, has been saved in the list. More info: Major Genre: {}; US Gross: {}, Worldwide Gross: {}, US DVD Sales: {}, Production Budget: {}. ".format(movie.title, director.name,distributor.name,movie.major_genre,movie.us_gross,movie.worldwide_gross,movie.us_dvd_sales,movie.production_budget)
-#
-# @app.route('/')
-# def index():
-#     movies = Movie.query.all()
-#     num_movies = len(movies)
-#     return render_template('index.html', num_movies=num_movies)
-#
-# @app.route('/all_movies')
-# def see_all():
-#     all_movies = []
-#     movies = Movie.query.all()
-#     for i in movies:
-#         all_movies.append((i.title))
-#     return render_template('all_movies.html',all_movies=all_movies)
-#
-# @app.route('/all_directors')
-# def see_director():
-#     all_directors = []
-#     directors = Director.query.all()
-#     for i in directors:
-#         all_directors.append((i.name))
-#     return render_template('all_directors.html',all_directors=all_directors)
-#
-#
-# if __name__ == '__main__':
-#     db.create_all()
-#     app.run()
-
-# print("hello")
-
+@app.route('/all')
+def show_all():
+    all_approach=Approach.query.all()
+    return render_template('all.html', all_approach=all_approach)
 
 
 if __name__ == '__main__':
     db.create_all()
-    # add_data()
     main_populate("data.csv")
     app.run()

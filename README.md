@@ -8,34 +8,34 @@ UX Design and Research Method toolkit
 
 ## Project Description
 
-My project will help Design students learn a design or research method, and show them a list of design and research methods to help them choose the one they need in their design and research process. The project will allow users to click on a button to require a random design or research method on the homepage, which will show a method and its detail information (name, description, tasks etc). Since all methods are categorized by 2 metrics, purpose of the method and stages in the project process, users can filter methods based on their interest and see them and their detail information on the page of another route. If there is any method not mentioned but used in Design industry, users are welcome to add them into our system through filling out a form on the third route.
+My project creates a toolkit of UX Design/Research methods. This toolkit can show user a list of design and research methods to help them choose the right one they need in their design and research process. There are 3 routes users can explore. 1)The homepage will randomly select one design/research method and show it on the homepage. By clicking on the button, users will see details of the method. 2)All the methods will be shown on the 2nd route: "/all". 3)The 3rd route will have a form that users can use to add methods into our database and show it on the 2nd route.  
 
 ## How to run
 
 1. First, you should install all requirements with `pip install -r requirements.txt`
-2. Second, you should run `python programname.py runserver`, and copy the route in your terminal to your browser
-3. Third, try out different routes: / (home page);  /category;  /add
+2. Second, you should run `python SI507project_tests.py runserver`, and copy the route in your terminal to your browser
+3. Third, try out different routes: / (home page);  /form;  /all.
 
 
 ## How to use
-There are 3 ways of utilizing this toolkit
-1. The homepage can generate a random design/research method. Test if you are familiar with it! If not, it is time to learn a new method now.
-2. If you are doing a project and wondering what method you shall use, you can go to the second route to see different methods by categories (in which stage is your project or the purpose of the method).
+There are 3 ways of utilizing this toolkit.
+1. The homepage can generate a random design/research method. Test if you are familiar with it! If not, it is time to learn a new method now. You can click on the button to see details about the method.
+2. If you are doing a project and wondering what method you shall use, you can go to the second route to see different methods.
 3. If you have some methods that this toolkit doesn't cover, feel free to add them by submitting a form to our database!
 
 ## Routes in this application
 - `/ (home page)` -> this is the home page, on which only one random method will be shown
-- `/category` -> this route will show all methods but in different categories
-- `/form` -> this route has a form for user input into the database
+- `/all` -> this route will show all Design and Research methods to you
+- `/form` -> this route has a form for user to input new method into the database
 
 ## How to run tests
-1. First, access the repository and download file SI507project_tests.py along with other files
+1. First, access the repository and download the file SI507project_tests.py along with other files
 2. Second, run file SI507project_tests.py in terminal through commend "python -m unittest SI507project_tests.py"
 
 ## In this repository:
 - templates
   - index.html
-  - category.html
+  - all.html
   - form.html
 - SI507project_tools.py
 - SI507project_tests.py
@@ -56,7 +56,7 @@ Below is a list of the requirements listed in the rubric for you to copy and pas
 ### General
 - [x] Project is submitted as a Github repository
 - [x] Project includes a working Flask application that runs locally on a computer
-- [x] Project includes at least 1 test suite file with reasonable tests in it.
+- [x] Project includes at least 1 test suite file with reasonable tests in it
 - [x] Includes a `requirements.txt` file containing all required modules to run program
 - [x] Includes a clear and readable README.md that follows this template
 - [x] Includes a sample .sqlite/.db file
@@ -65,11 +65,11 @@ Below is a list of the requirements listed in the rubric for you to copy and pas
 - [x] Includes screenshots and/or clear descriptions of what your project should look like when it is working
 
 ### Flask Application
-- [ ] Includes at least 3 different routes
-- [ ] View/s a user can see when the application runs that are understandable/legible for someone who has NOT taken this course
-- [ ] Interactions with a database that has at least 2 tables
+- [x] Includes at least 3 different routes
+- [x] View/s a user can see when the application runs that are understandable/legible for someone who has NOT taken this course
+- [x] Interactions with a database that has at least 2 tables
 - [x] At least 1 relationship between 2 tables in database
-- [ ] Information stored in the database is viewed or interacted with in some way
+- [x] Information stored in the database is viewed or interacted with in some way
 
 ### Additional Components (at least 6 required)
 - [ ] Use of a new module

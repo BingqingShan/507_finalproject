@@ -1,0 +1,26 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<h1> All UX Design & Research Method in Our Website</h1>
+
+{% for i in all_approach %}
+<div style="background-color:#F0F0F0;margin:5%;padding:10%;border-radius:16px;" >
+<img src={{ i.image }} >
+<h2>Method Name: {{ i.name }}</h2>
+<p>Time: {{ i.time }}</p>
+<p>Task: {{ i.task }}</p>
+<p>When: {{ i.when }}</p>
+<p>Why: {{ i.why }}</p>
+<p>Note: {{ i.note }}</p>
+<p>Output: {{ i.output }}</p>
+<p>Next: {{ i.next }}</p>
+
+<p class="stage">Stage: {{ i.stage.name }}</p>
+<p class="purpose">Purpose: {{ i.purpose.name }}</p>
+</div>
+{% endfor %}
+
+</body>
+</html>
