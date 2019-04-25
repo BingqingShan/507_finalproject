@@ -8,7 +8,7 @@ UX Design and Research Method toolkit
 
 ## Project Description
 
-My project creates a toolkit of UX Design/Research methods. This toolkit can show user a list of design and research methods to help them choose the right one they need in their design and research process. There are 3 routes users can explore. 1)The homepage will randomly select one design/research method and show it on the homepage. By clicking on the button, users will see details of the method. 2)All the methods will be shown on the 2nd route: "/all". 3)The 3rd route will have a form that users can use to add methods into our database and show it on the 2nd route.  
+My project creates a toolkit of UX Design/Research methods. This toolkit can show user a list of design and research methods to help them choose the right one they need in their design and research process. There are 3 main routes users can explore. 1)The homepage will randomly select one design/research method and show it on the homepage. 2)All the methods will be shown on the 2nd route. 3)The 3rd route will have a form that users can use to add methods into our database and show it on the 2nd route.  
 
 ## How to run
 
@@ -20,13 +20,15 @@ My project creates a toolkit of UX Design/Research methods. This toolkit can sho
 ## How to use
 There are 3 ways of utilizing this toolkit.
 1. The homepage can generate a random design/research method. Test if you are familiar with it! If not, it is time to learn a new method now. You can click on the button to see details about the method.
-2. If you are doing a project and wondering what method you shall use, you can go to the second route to see different methods.
+2. If you are doing a project and wondering what method you shall use, you can go to the second route to see all methods we have for you.
 3. If you have some methods that this toolkit doesn't cover, feel free to add them by submitting a form to our database!
 
 ## Routes in this application
-- `/ (home page)` -> this is the home page, on which only one random method will be shown
-- `/all` -> this route will show all Design and Research methods to you
-- `/form` -> this route has a form for user to input new method into the database
+- `/ (home page)` -> this is the home page, on which only one random method will be shown.
+- `/all` -> this route will show all Design and Research methods to you.
+- `/form` -> this route has a form for user to input new method into the database.
+- `/formresult` -> this route will notify you if you successfully submit the form and will allow you go back to route '/all' to check if it is on our website.
+
 
 ## How to run tests
 1. First, access the repository and download the file SI507project_tests.py along with other files
