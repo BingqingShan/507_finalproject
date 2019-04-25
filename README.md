@@ -13,13 +13,13 @@ My project creates a toolkit of UX Design/Research methods. This toolkit can sho
 ## How to run
 
 1. First, you should install all requirements with `pip install -r requirements.txt`
-2. Second, you should run `python SI507project_tests.py runserver`, and copy the route in your terminal to your browser
+2. Second, you should run `python SI507project_tools.py runserver`, and copy the route in your terminal to your browser
 3. Third, try out different routes: / (home page);  /form;  /all.
 
 
 ## How to use
 There are 3 ways of utilizing this toolkit.
-1. The homepage can generate a random design/research method. Test if you are familiar with it! If not, it is time to learn a new method now. You can click on the button to see details about the method.
+1. The homepage can generate a random design/research method. Test if you are familiar with it! If not, it is time to learn a new method now. You can click on the button to see details about the method. If you want it to change to another method, you only need to refresh your page.
 2. If you are doing a project and wondering what method you shall use, you can go to the second route to see all methods we have for you.
 3. If you have some methods that this toolkit doesn't cover, feel free to add them by submitting a form to our database!
 
