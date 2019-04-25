@@ -11,7 +11,6 @@ UX Design and Research Method toolkit
 My project creates a toolkit of UX Design/Research methods. This toolkit can show user a list of design and research methods to help them choose the right one they need in their design and research process. There are 3 main routes users can explore. 1)The homepage will randomly select one design/research method and show it on the homepage. 2)All the methods will be shown on the 2nd route. 3)The 3rd route will have a form that users can use to add methods into our database and show it on the 2nd route.  
 
 ## How to run
-
 1. First, you should install all requirements with `pip install -r requirements.txt`
 2. Second, you should run `python SI507project_tools.py runserver`, and copy the route in your terminal to your browser
 3. Third, try out different routes: / (home page);  /form;  /all.
@@ -24,6 +23,7 @@ There are 3 ways of utilizing this toolkit.
 3. If you have some methods that this toolkit doesn't cover, feel free to add them by submitting a form to our database!
 
 ## Routes in this application
+There are 4 routes in total. You can refer picture in screenshots file to have an idea how they look like.
 - `/ (home page)` -> this is the home page, on which only one random method will be shown.
 - `/all` -> this route will show all Design and Research methods to you.
 - `/form` -> this route has a form for user to input new method into the database.
@@ -40,6 +40,7 @@ There are 3 ways of utilizing this toolkit.
   - all.html
   - form.html
   - formresult.html
+- screenshots
 - SI507project_tools.py
 - SI507project_tests.py
 - requirements.txt
@@ -50,6 +51,7 @@ There are 3 ways of utilizing this toolkit.
 - data.csv
 - db_populate.py
 - finalproject_cache.json
+
 
 ---
 ## Code Requirements for Grading
