@@ -1,8 +1,42 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+</style>
 </head>
 
 <body>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/all">All Methods</a></li>
+    <li><a href="/form">Add Methods</a></li>
+  </ul>
 <div style="background-color:#F0F0F0;margin:5%;padding:10%;border-radius:16px;" >
 <h1> Successfully added!</h1>
 <a href="/all">Check your method in our website</a>
